@@ -15,6 +15,7 @@ import AgentStudio from './pages/incubation/AgentStudio';
 import ProductionDashboard from './pages/production/ProductionDashboard';
 import OrgAgentDetail from './pages/production/OrgAgentDetail';
 import TrainingTrack from './pages/production/TrainingTrack';
+import OrgAgentBuilder from './pages/production/OrgAgentBuilder';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/production" element={<ProductionDashboard />} />
             <Route path="/production/agents/:name" element={<OrgAgentDetail />} />
             <Route path="/production/training" element={<TrainingTrack />} />
+            <Route path="/production/org-builder" element={<OrgAgentBuilder />} />
           </Route>
         </Routes>
       </BrowserRouter>

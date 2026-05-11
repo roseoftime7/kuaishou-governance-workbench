@@ -66,7 +66,7 @@ export default function IncubationDashboard() {
 
       {/* 快捷操作 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col span={8}>
+        <Col span={12}>
           <Card hoverable onClick={() => navigate('/incubation/studio')}>
             <Space direction="vertical" style={{ width: '100%', textAlign: 'center', padding: 8 }}>
               <PlusOutlined style={{ fontSize: 28, color: '#1677ff' }} />
@@ -77,24 +77,13 @@ export default function IncubationDashboard() {
             </Space>
           </Card>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <Card hoverable onClick={() => navigate('/incubation/studio')}>
             <Space direction="vertical" style={{ width: '100%', textAlign: 'center', padding: 8 }}>
               <PlayCircleOutlined style={{ fontSize: 28, color: '#52c41a' }} />
               <Typography.Text strong>对话执行</Typography.Text>
               <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                 通过对话方式交互执行 Agent
-              </Typography.Text>
-            </Space>
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card hoverable onClick={() => navigate('/production')}>
-            <Space direction="vertical" style={{ width: '100%', textAlign: 'center', padding: 8 }}>
-              <ExperimentOutlined style={{ fontSize: 28, color: '#722ed1' }} />
-              <Typography.Text strong>申请升级</Typography.Text>
-              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                将个人 Agent 升级为组织 Agent
               </Typography.Text>
             </Space>
           </Card>
@@ -176,8 +165,8 @@ export default function IncubationDashboard() {
         <Space>
           <ExperimentOutlined style={{ color: '#722ed1' }} />
           <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-            💡 提示: 在个人模式中创建的 Agent 经过充分调试后，可提交升级为组织 Agent，
-            进入生产反馈模式由团队集中管控。
+            💡 提示: 在个人模式中创建的 Agent 拥有独立的 Skill 和 CLI 能力，
+            可被组织分身构建引用，实现能力的复用和规模化。
           </Typography.Text>
         </Space>
       </Card>

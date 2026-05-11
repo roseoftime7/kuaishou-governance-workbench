@@ -13,7 +13,7 @@ const { Sider } = Layout;
 
 const HOME_CHILDREN = [
   { key: '/incubation/studio', icon: <PlusOutlined />, label: '创建个人分身' },
-  { key: '/incubation', icon: <StarOutlined />, label: '升级个人分身' },
+  { key: '/production/org-builder', icon: <StarOutlined />, label: '组织分身构建' },
   { key: '/production', icon: <CloudServerOutlined />, label: '组织分身产出监控' },
   { key: '/production/training', icon: <ToolOutlined />, label: '组织分身管理' },
 ];

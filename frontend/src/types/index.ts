@@ -175,6 +175,45 @@ export interface Iteration {
   created_at: string;
 }
 
+// ===== 组织模式 - 增强反馈生命周期 =====
+
+// 反馈覆盖状态：待处理 → 迭代中 → 已覆盖 → 已验证
+export type FeedbackCoverageStatus = 'pending' | 'in_iteration' | 'covered' | 'verified';
+
+// 反馈回复/讨论
+export interface FeedbackReply {
+  id: string;
+  user: string;
+  user_role: string;
+  content: string;
+  created_at: string;
+}
+
+// 单条结构化反馈（多角色可对同一步骤分别反馈）
+export interface StepFeedbackEntry {
+  id: string;
+  type: StepFeedbackType;
+  content: string;
+  rating?: number;
+  target_output?: string;
+  created_by: string;
+  operator_role: string;
+  // 标注相关
+  annotation?: string;
+  annotation_label?: 'correct' | 'incorrect' | 'partial' | 'uncertain';
+  // 生命周期
+  coverage_status: FeedbackCoverageStatus;
+  resolved_in_iteration?: string;
+  resolved_at?: string;
+  replies: FeedbackReply[];
+  created_at: string;
+}
+
+// 携带多角色反馈的执行步骤
+export interface ExecStepWithFeedback extends ExecStep {
+  feedback_entries: StepFeedbackEntry[];
+}
+
 // ===== 对话 =====
 export interface Message {
   id: string;
