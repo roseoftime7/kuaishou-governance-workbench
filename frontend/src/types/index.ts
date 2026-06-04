@@ -241,3 +241,168 @@ export interface CLICommand {
   timestamp: Date;
   duration_ms: number;
 }
+
+// ===== 治理工作流 Pipeline =====
+
+/** 四个标准治理阶段 */
+export type WorkflowStageType = 'perception' | 'judgment' | 'mitigation' | 'reinforcement';
+
+export interface WorkflowStageDef {
+  type: WorkflowStageType;
+  name: string;
+  order: number;
+  description: string;
+  icon: string;
+  color: string;
+  bgColor: string;
+}
+
+/** 人工交互模式：阻断 / 非阻断 */
+export type HumanInteractionMode = 'blocking' | 'non_blocking';
+
+/** 人工交互类型 */
+export type HumanInteractionType =
+  // === 标注类（不阻断） ===
+  | 'annotate_fp_fn'      // 标注误报/漏报（感知阶段）
+  | 'annotate_judgment'   // 标注研判结果
+  | 'annotate_action'     // 标注处置效果
+  | 'rate_quality'        // 评分
+  // === 确认类（不阻断，可累积反馈） ===
+  | 'confirm_signal'      // 确认风险信号准确性
+  | 'confirm_dispatch'    // 确认case分发
+  | 'suggest_improvement' // 改进建议
+  // === 阻断类（会暂停流程） ===
+  | 'return_judgment'     // 人工返回研判结果和原因（阻断流程）
+  | 'approve_action'      // 批准处置动作（阻断流程）
+  | 'approve_rule';       // 审批规则变更（阻断流程）
+
+/** 分配信息 */
+export interface TaskAssignment {
+  assignee: string;           // 被分配人
+  assigneeRole: string;       // 被分配人角色
+  deadline?: string;          // 截止时间
+  priority: 'urgent' | 'high' | 'normal';
+  instruction?: string;       // 任务说明
+}
+
+/** 人工交互配置 */
+export interface HumanInteraction {
+  type: HumanInteractionType;
+  mode: HumanInteractionMode; // 阻断 / 非阻断
+  label: string;              // 操作入口标签
+  description: string;        // 操作说明
+  // 阻断型专用
+  blockingConfig?: {
+    assignment: TaskAssignment;  // 分配给谁
+    actionLabel: string;         // 主操作按钮文案，如"提交研判结论"
+    secondaryLabel?: string;     // 次要操作，如"转交他人"
+    inputRequired: boolean;      // 是否需要填写文本
+    inputLabel?: string;         // 输入框标签
+    hasOptions?: { value: string; label: string }[]; // 可选项
+    notifyChannels?: string[];   // 通知渠道: 'in_app' | 'email' | 'dingtalk'
+  };
+  // 非阻断型专用
+  nonBlockingConfig?: {
+    feedbackType: 'annotation' | 'rating' | 'suggestion' | 'correction';
+    quickActions?: { value: string; label: string; icon?: string }[]; // 快捷操作按钮
+    showInput?: boolean;       // 是否显示文本输入
+    inputPlaceholder?: string;
+  };
+}
+
+/** 阶段级别指标（按用户要求定制） */
+export interface StageMetrics {
+  durationMs: number;
+  // 感知阶段
+  recallCases?: number;           // 召回case量
+  strategyEffectiveRate?: number; // 策略有效率
+  // 研判阶段
+  riskCases?: number;             // 风险case数
+  // 处置阶段
+  disposedCases?: number;         // 处置case数
+  // 策略补防阶段
+  iteratedStrategies?: number;    // 迭代策略条数
+  newRecalledCases?: number;      // 新增召回审出风险case
+  // 通用
+  accuracy?: number;
+  customLabel?: string;
+  customValue?: number | string;
+}
+
+/** 工作流子步骤 */
+export interface WorkflowSubStep {
+  id: string;
+  name: string;
+  type: 'skill_call' | 'llm_reason' | 'decision' | 'sub_agent';
+  status: StepStatus;
+  input: string;
+  output: string;
+  duration_ms: number;
+  details?: string;
+  humanInteraction: HumanInteraction;
+  feedback_entries: StepFeedbackEntry[];
+}
+
+/** 一个治理阶段包含的子步骤 */
+export interface WorkflowStage {
+  stage: WorkflowStageType;
+  status: 'pending' | 'running' | 'completed' | 'blocked' | 'needs_approval';
+  subSteps: WorkflowSubStep[];
+  metrics: StageMetrics;
+  needsApproval: boolean;
+  approvalStatus?: 'pending' | 'approved' | 'rejected' | 'modified';
+  approvalBy?: string;
+  approvedAt?: string;
+  // 阻断任务列表（阻挡该阶段的阻断型交互）
+  blockingTasks: BlockingTask[];
+}
+
+/** 阻断任务 */
+export interface BlockingTask {
+  id: string;
+  stepId: string;
+  stepName: string;
+  interactionType: HumanInteractionType;
+  assignment: TaskAssignment;
+  description: string;
+  createdAt: string;
+  status: 'pending' | 'completed' | 'transferred';
+  result?: string;
+  completedBy?: string;
+  completedAt?: string;
+}
+
+/** 一次完整的治理执行 */
+export interface GovernanceExecution {
+  id: string;
+  agentName: string;
+  input: string;
+  status: 'running' | 'completed' | 'failed' | 'awaiting_approval';
+  stages: WorkflowStage[];
+  totalDurationMs: number;
+  createdAt: string;
+  completedAt?: string;
+  executedBy: string;
+  overallMetrics: {
+    totalCases: number;
+    effectiveRecall: number;
+    rulesGenerated: number;
+    actionsTaken: number;
+  };
+}
+
+/** Agent 工作区（一级页面用） */
+export interface AgentWorkspace {
+  agentName: string;
+  displayName: string;
+  description: string;
+  icon: string;
+  kpis: {
+    totalExecutions: number;
+    successRate: number;
+    avgDurationMs: number;
+    pendingBlocks: number;      // 待处理的阻断任务数
+  };
+  latestExecution: GovernanceExecution | null;
+  activeBlockingTasks: BlockingTask[];
+}

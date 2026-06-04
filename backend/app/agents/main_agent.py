@@ -11,8 +11,8 @@ class MainAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             name="main_agent",
-            display_name="WorkBuddy",
-            description="治理数字人助手，协调各子Agent完成治理工作",
+            display_name="司衡 Themis",
+            description="电商治理WorkBuddy，协调各子Agent完成治理工作",
         )
         self.sub_agents: dict[str, BaseAgent] = {}
 
@@ -20,7 +20,7 @@ class MainAgent(BaseAgent):
         self.sub_agents[agent.name] = agent
 
     def _build_system_prompt(self) -> str:
-        return """你是快手电商治理运营团队的 AI 助手 WorkBuddy。
+        return """你是快手电商治理运营团队的 AI 助手 — 司衡 Themis（电商治理WorkBuddy）。
 你的职责是：
 1. 理解用户的需求，判断应该由哪个子 Agent 来处理
 2. 如果需要多个子 Agent 协作，进行任务分解和编排
@@ -99,7 +99,7 @@ class MainAgent(BaseAgent):
             )
         else:
             responses.append(
-                f"您好！我是 **WorkBuddy**，您的治理数字人助手。\n\n"
+                f"您好！我是 **司衡 Themis**，您的电商治理WorkBuddy。\n\n"
                 f"我可以帮助您处理以下事务：\n\n"
                 f"1. ⚠️ **风险感知** — 监控治理风险，实时告警\n"
                 f"2. 🔍 **巡检管理** — 自动化巡检任务\n"

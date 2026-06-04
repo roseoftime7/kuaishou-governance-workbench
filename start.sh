@@ -1,7 +1,7 @@
 #!/bin/bash
-# 治理数字人 WorkBuddy 工作台 - 启动脚本
+# 司衡/Themis——电商治理WorkBuddy - 启动脚本
 
-echo "🚀 启动治理数字人 WorkBuddy 工作台..."
+echo "🚀 启动司衡/Themis——电商治理WorkBuddy..."
 
 # 启动后端
 echo "📦 启动后端服务..."

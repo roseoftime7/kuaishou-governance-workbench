@@ -26,7 +26,7 @@ export default function DashboardPage() {
     <div>
       <div style={{ marginBottom: 20 }}>
         <Typography.Title level={4} style={{ margin: 0 }}>🏠 个人和组织分身运转概览</Typography.Title>
-        <Typography.Text type="secondary">治理数字人 WorkBuddy — 创建·执行·监控·迭代 完整闭环</Typography.Text>
+        <Typography.Text type="secondary">司衡/Themis——电商治理WorkBuddy · 创建·执行·监控·迭代 完整闭环</Typography.Text>
       </div>
 
       {/* 四大快捷入口 */}

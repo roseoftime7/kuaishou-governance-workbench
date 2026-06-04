@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '../../store';
+import ThemisLogo from './ThemisLogo';
 
 const { Sider } = Layout;
 
@@ -108,11 +109,11 @@ export default function AppSidebar() {
       style={{ background: '#001529', height: '100vh', position: 'sticky', top: 0, left: 0, overflowY: 'auto' }}
     >
       <div style={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '0 16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <RobotOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+        <ThemisLogo size={collapsed ? 28 : 36} collapsed={collapsed} />
         {!collapsed && (
           <div>
-            <Typography.Text style={{ color: '#fff', fontSize: 15, fontWeight: 600, display: 'block', lineHeight: 1.2 }}>WorkBuddy</Typography.Text>
-            <Typography.Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, display: 'block' }}>治理数字人工作台</Typography.Text>
+            <Typography.Text style={{ color: '#fff', fontSize: 14, fontWeight: 600, display: 'block', lineHeight: 1.2 }}>司衡 Themis</Typography.Text>
+            <Typography.Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 9, display: 'block' }}>电商治理WorkBuddy</Typography.Text>
           </div>
         )}
       </div>

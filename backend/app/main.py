@@ -12,7 +12,7 @@ from app.websocket.manager import manager
 
 load_dotenv()
 
-APP_NAME = os.getenv("APP_NAME", "治理数字人WorkBuddy")
+APP_NAME = os.getenv("APP_NAME", "司衡/Themis——电商治理WorkBuddy")
 APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
 DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
